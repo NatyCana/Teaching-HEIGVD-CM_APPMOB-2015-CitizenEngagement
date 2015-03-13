@@ -1,19 +1,24 @@
 <ion-view view-title="New Issue">
-  	<ion-nav-buttons side="secondary">
-    	<button type="button" ng-controller="LogoutCtrl" ng-click="logOut()" class="button button-stable">Log Out</button>
-  	</ion-nav-buttons>
-  	<ion-content>
-  	 	<label class="item item-input" >
-    		<span class="input-label">Decsription</span>
-    		<input type="text" placeholder="description">
-  		</label>
-  		<div>
-  			<label item-select>Issue Type</label>
-  			<select>
-      			<option>Blue</option>
-      			<option selected>Green</option>
-      			<option>Red</option>
-    		</select>
-    	</div>
-  	</ion-content>
+    <ion-nav-buttons side="secondary">
+        <button type="button" ng-controller="LogoutCtrl" ng-click="logOut()" class="button button-stable">Log Out</button>
+    </ion-nav-buttons>
+    <ion-content>
+        <label class="item item-input" >
+            <span class="input-label">Decsription</span>
+            <input type="text" placeholder="description">
+        </label>
+
+        <label class="item item-input item-select">
+            <div class="input-label" >Issue Type</div>
+            <select ng-controller="GetIssueType">
+                <option ng-repeat="item in items">{{item.name}}</option>
+
+            </select>
+        </label>
+       <div ng-controller="GetIssueType">
+            <ul>
+                <li ng-repeat="item in items"> {{item.name}} </li>
+            </ul>
+        </div>
+    </ion-content>
 </ion-view>
