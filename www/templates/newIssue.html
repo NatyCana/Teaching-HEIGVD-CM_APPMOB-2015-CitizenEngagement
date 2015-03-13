@@ -1,0 +1,19 @@
+<ion-view view-title="New Issue">
+  	<ion-nav-buttons side="secondary">
+    	<button type="button" ng-controller="LogoutCtrl" ng-click="logOut()" class="button button-stable">Log Out</button>
+  	</ion-nav-buttons>
+  	<ion-content>
+  	 	<label class="item item-input" >
+    		<span class="input-label">Decsription</span>
+    		<input type="text" placeholder="description">
+  		</label>
+  		<div>
+  			<label item-select>Issue Type</label>
+  			<select>
+      			<option>Blue</option>
+      			<option selected>Green</option>
+      			<option>Red</option>
+    		</select>
+    	</div>
+  	</ion-content>
+</ion-view>

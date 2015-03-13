@@ -3,7 +3,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('citizen-engagement', ['ionic', 'citizen-engagement.auth', 'citizen-engagement.constants'])
+angular.module('citizen-engagement', ['ionic','citizen-engagement.auth','citizen-engagement.constants'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -17,24 +17,6 @@ angular.module('citizen-engagement', ['ionic', 'citizen-engagement.auth', 'citiz
     }
   });
 })
-
-.run(function(AuthService, $rootScope, $state) {
-
-  // Listen for the $stateChangeStart event of AngularUI Router.
-  // This event indicates that we are transitioning to a new state.
-  // We have the possibility to cancel the transition in the callback function.
-  $rootScope.$on('$stateChangeStart', function(event, toState) {
-
-    // If the user is not logged in and is trying to access another state than "login"...
-    if (!AuthService.currentUserId && toState.name != 'login') {
-
-      // ... then cancel the transition and go to the "login" state instead.
-      event.preventDefault();
-      $state.go('login');
-    }
-  });
-})
-
 .config(function($stateProvider, $urlRouterProvider) {
 
   // Ionic uses AngularUI Router which uses the concept of states
@@ -69,7 +51,8 @@ angular.module('citizen-engagement', ['ionic', 'citizen-engagement.auth', 'citiz
       url: '/issueMap',
       views: {
         'tab-issueMap': {
-          templateUrl: 'templates/issueMap.html'
+          templateUrl: 'templates/issueMap.html',
+          controller: "MapController"
         }
       }
     })
@@ -82,7 +65,11 @@ angular.module('citizen-engagement', ['ionic', 'citizen-engagement.auth', 'citiz
         }
       }
     })
-
+    .state('login', {
+      url: '/login',
+      controller: 'LoginCtrl',
+     templateUrl: 'templates/login.html'
+    })
     // This is the issue details state.
     .state('tab.issueDetails', {
       // We use a parameterized route for this state.
@@ -97,15 +84,131 @@ angular.module('citizen-engagement', ['ionic', 'citizen-engagement.auth', 'citiz
       }
     })
 
-    .state('login', {
-      url: '/login',
-			controller: 'LoginCtrl',
-      templateUrl: 'templates/login.html'
-    })
   ;
 
-  // Define the default state (i.e. the first page displayed when the app opens).
+  // Define the default state (i.e. the first screen displayed when the app opens).
   $urlRouterProvider.otherwise(function($injector) {
-    $injector.get('$state').go('login'); // Go to the new issue tab by default.
+    $injector.get('$state').go('tab.newIssue'); // Go to the new issue tab by default.
   });
+})
+.run(function(AuthService, $rootScope, $state) {
+
+  // Listen for the $stateChangeStart event of AngularUI Router.
+  // This event indicates that we are transitioning to a new state.
+  // We have the possibility to cancel the transition in the callback function.
+  $rootScope.$on('$stateChangeStart', function(event, toState) {
+
+    // If the user is not logged in and is trying to access another state than "login"...
+    if (!AuthService.currentUserId && toState.name != 'login') {
+
+      // ... then cancel the transition and go to the "login" state instead.
+      event.preventDefault();
+      $state.go('login');
+    }
+  });
+})
+.controller('LoginCtrl', function(AuthService, $http, $ionicHistory, $ionicLoading, $scope, $state) {
+
+    // The $ionicView.beforeEnter event happens every time the screen is displayed.
+    $scope.$on('$ionicView.beforeEnter', function() {
+      // Re-initialize the user object every time the screen is displayed.
+      // The first name and last name will be automatically filled from the form thanks to AngularJS's two-way binding.
+      $scope.user = {};
+    });
+
+    // Add the register function to the scope.
+    $scope.register = function() {
+
+      // Forget the previous error (if any).
+      delete $scope.error;
+
+      // Show a loading message if the request takes too long.
+      $ionicLoading.show({
+        template: 'Logging in...',
+        delay: 750
+      });
+
+      // Make the request to retrieve or create the user.
+      $http({
+        method: 'POST',
+        url: 'http://localhost:8100/api-proxy/users/logister',
+        data: $scope.user
+      }).success(function(user) {
+
+        // If successful, give the user to the authentication service.
+        AuthService.setUser(user);
+
+        // Hide the loading message.
+        $ionicLoading.hide();
+
+        // Set the next view as the root of the history.
+        // Otherwise, the next screen will have a "back" arrow pointing back to the login screen.
+        $ionicHistory.nextViewOptions({
+          disableBack: true,
+          historyRoot: true
+        });
+
+        // Go to the issue creation tab.
+        $state.go('tab.newIssue');
+
+      }).error(function() {
+
+        // If an error occurs, hide the loading message and show an error message.
+        $ionicLoading.hide();
+        $scope.error = 'Could not log in.';
+      });
+    };
+  })
+.controller('LogoutCtrl', function(AuthService, $scope, $state) {
+    $scope.logOut = function() {
+      AuthService.unsetUser();
+      $state.go('login');
+    };
+  })
+ .config(function($httpProvider) {
+    $httpProvider.interceptors.push('AuthInterceptor');
+  })
+
+
+
+
+.factory('Camera', [ function($q) {
+
+  return {
+    getPicture: function(options) {
+      navigator.camera.getPicture(function(result) {
+        
+        q.resolve(result);
+      }, function(err) {
+        q.reject(err);
+      }, options);
+
+      return q.promise;
+    }
+  }
+}])
+.controller('cameraControl', function($scope, Camera) {
+
+  $scope.getPhoto = function() {
+
+    Camera.getPicture().then(function(imageURI) {
+       $scope.imageURI = "data:image/jpeg;base64,"+imageURI
+    }, function(err) {
+      console.err(err);
+    });
+  };
+
+})
+.controller("MapController", function($scope, mapboxMapId, mapboxAccessToken) {
+var mapboxTileLayer = "http://api.tiles.mapbox.com/v4/" + mapboxMapId;
+mapboxTileLayer = mapboxTileLayer + "/{z}/{x}/{y}.png?access_token=" + mapboxAccessToken;
+$scope.mapDefaults = {
+ tileLayer: mapboxTileLayer
+ };
+ $scope.mapCenter = {
+ lat: 51.48,
+ lng: 0,
+ zoom: 14
+ };
+ $scope.mapMarkers = [];
 });

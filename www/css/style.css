@@ -1,1 +1,12 @@
 /* Empty. Add your own CSS if you like */
+ion-view{
+	background: 
+      url(../img/gplaypattern.png) repeat-x bottom ;
+}
+button {
+	display: inline-block;
+}
+p{
+	font-family: Helvetica;
+}
+
