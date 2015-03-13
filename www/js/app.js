@@ -3,7 +3,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('citizen-engagement', ['ionic', 'citizen-engagement.auth', 'citizen-engagement.constants'])
+angular.module('citizen-engagement', ['ionic', 'citizen-engagement.auth', 'citizen-engagement.constants', 'leaflet-directive'])])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -108,4 +108,18 @@ angular.module('citizen-engagement', ['ionic', 'citizen-engagement.auth', 'citiz
   $urlRouterProvider.otherwise(function($injector) {
     $injector.get('$state').go('login'); // Go to the new issue tab by default.
   });
+});
+
+.controller("MapController", function($scope, mapboxMapId, mapboxAccessToken) {
+var mapboxTileLayer = "http://api.tiles.mapbox.com/v4/" + mapboxMapId;
+mapboxTileLayer = mapboxTileLayer + "/{z}/{x}/{y}.png?access_token=" + mapboxAccessToken;
+$scope.mapDefaults = {
+ tileLayer: mapboxTileLayer
+ };
+ $scope.mapCenter = {
+ lat: 51.48,
+ lng: 0,
+ zoom: 14
+ };
+ $scope.mapMarkers = [];
 });
