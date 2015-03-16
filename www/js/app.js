@@ -3,7 +3,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('citizen-engagement', ['ionic', 'citizen-engagement.auth', 'citizen-engagement.constants'])
+angular.module('citizen-engagement', ['ionic', 'citizen-engagement.auth', 'citizen-engagement.constants', "leaflet-directive"])
 
         .run(function($ionicPlatform) {
     $ionicPlatform.ready(function() {
@@ -17,7 +17,14 @@ angular.module('citizen-engagement', ['ionic', 'citizen-engagement.auth', 'citiz
         }
     });
 })
+        .config(function($ionicConfigProvider) {
+    $ionicConfigProvider.tabs.position("bottom"); //Places them at the bottom for all OS
+
+  
+})
         .config(function($stateProvider, $urlRouterProvider) {
+
+
 
     // Ionic uses AngularUI Router which uses the concept of states
     // Learn more here: https://github.com/angular-ui/ui-router
@@ -185,15 +192,34 @@ angular.module('citizen-engagement', ['ionic', 'citizen-engagement.auth', 'citiz
 
         .controller("GetIssueType", function($scope, $http, apiUrl) {
     $scope.items = [];
-        $http({
-            method: 'GET',
-            url: apiUrl + '/issueTypes'
-        })
-                .success(function(data) {
-            $scope.items = data;
-            console.log(data);
-        })
-                .error(function(data) {
-            console.log("Error");
-        });
+    $http({
+        method: 'GET',
+        url: apiUrl + '/issueTypes'
+    })
+            .success(function(data) {
+        $scope.items = data;
+        console.log(data);
+    })
+            .error(function(data) {
+        console.log("Error");
+    });
 })
+
+        .controller("GetIssues", function($scope, $http, apiUrl) {
+    $scope.items = [];
+    $http({
+        method: 'GET',
+        url: apiUrl + '/issues'
+    })
+            .success(function(data) {
+        $scope.items = data;
+        console.log(data);
+    })
+            .error(function(data) {
+        console.log("Error");
+    });
+
+
+})
+
+

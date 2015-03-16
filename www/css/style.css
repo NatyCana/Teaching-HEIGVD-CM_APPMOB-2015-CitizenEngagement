@@ -10,3 +10,13 @@ p{
 	font-family: Helvetica;
 }
 
+.fltrt {
+    float: right;
+    
+}
+
+.leaflet-container{
+    width: 100%;
+    height: 100%;
+    position: static !important;
+}
