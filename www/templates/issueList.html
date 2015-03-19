@@ -6,9 +6,7 @@
                 <ion-nav-buttons side="left">
                     <button menu-toggle="left" class="button button-icon icon ion-search"></button>
                 </ion-nav-buttons>
-                <ion-nav-buttons side="secondary">
-                    <button type="button" ng-controller="LogoutCtrl" ng-click="logOut()" class="button">Log Out</button>
-                </ion-nav-buttons>
+                
             </ion-nav-bar>
             <ion-view view-title="Issue List">
                 <ion-content class="has-header">
@@ -18,7 +16,7 @@
                             <img src="{{item.imageUrl}}"/>
                             <h3 >{{item.createdOn}}</h3>
                             <p>{{item.issueType.name}}</p>
-                            <a class=" button icon-right ion-chevron-right button-clear fltrt" id="{{item.id}}" ui-sref="tab.issueDetails({issueId: item.id})">More</a>
+                            <a class=" button icon-right ion-chevron-right button-clear fltrt" id="{{item.id}}" ng-click="goToDetails(item.id)">More</a>
                         </div>
 
                     </div>

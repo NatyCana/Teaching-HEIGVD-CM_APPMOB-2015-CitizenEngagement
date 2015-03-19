@@ -102,7 +102,21 @@ angular.module('citizen-engagement', ['ionic', 'citizen-engagement.auth', 'citiz
 
             //State ISSUEDETAILS
             // This is the issue details state.
-            .state('tab.issueDetails', {
+            .state('tab.issueDetailsList', {
+        // We use a parameterized route for this state.
+        // That way we'll know which issue to display the details of.
+        url: '/issueDetails/:issueId',
+        views: {
+            // Here we use the same "tab-issueList" view as the previous state.
+            // This means that the issue details template will be displayed in the same tab as the issue list.
+            'tab-issueList': {
+                controller: 'GetIssueDetails',
+                templateUrl: 'templates/issueDetails.html'
+            }
+        },
+        controller: "GetIssueDetails"
+    })
+            .state('tab.issueDetailsMap', {
         // We use a parameterized route for this state.
         // That way we'll know which issue to display the details of.
         url: '/issueDetails/:issueId',
@@ -247,7 +261,7 @@ angular.module('citizen-engagement', ['ionic', 'citizen-engagement.auth', 'citiz
 })
 
         /*///////////////////////////////////GetIssues///////////////////////////////////////////////*/
-        .controller("GetIssues", function($scope, $http, apiUrl) {
+        .controller("GetIssues", function($scope, $http, apiUrl, $state, $ionicHistory) {
     $scope.items = [];
     $http({
         method: 'GET',
@@ -259,6 +273,12 @@ angular.module('citizen-engagement', ['ionic', 'citizen-engagement.auth', 'citiz
             .error(function(data) {
         console.log("Error");
     });
+    $scope.goToDetails = function(issueId) {
+        $state.go("tab.issueDetailsList", {issueId: issueId});
+    }
+    $scope.goBack = function() {
+        $ionicHistory.goBack();
+    }
 })
 
         /*///////////////////////////////////GetIssueDetails///////////////////////////////////////////////*/
@@ -281,9 +301,6 @@ angular.module('citizen-engagement', ['ionic', 'citizen-engagement.auth', 'citiz
     });
 
 })
-
-
-
 
         /*///////////////////////////////////NewIssue///////////////////////////////////////////////*/
 
