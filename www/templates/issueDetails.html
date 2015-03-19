@@ -1,4 +1,11 @@
 <ion-view view-title="Issue Details">
+    <ion-nav-buttons>
+        <button  type="button" class="button icon-left button-icon icon ion-arrow-left-c"></button>
+    </ion-nav-buttons>
+    
+    <ion-nav-buttons side="secondary">
+        <button type="button" ng-controller="LogoutCtrl" ng-click="logOut()" class="button button-stable">Log Out</button>
+    </ion-nav-buttons>
     <ion-content>
 
         <div class="list card">
@@ -11,8 +18,6 @@
             <div class="item item-image">
                 <img src="{{issue.imageUrl}}" >
                 <p>{{issue.description}}</p>
-                <button class="button icon-left ion-edit">Edit</button>
-                <button class="button icon-left ion-trash-a">Delete</button>
             </div>
         </div>
 
@@ -21,12 +26,10 @@
                 Commentaires
             </div>
             <div class="list"  >
-                <div class="item">
-
-                    <h2>Posté par {{issue.comments[0].author.name}}</h2>
-                    <h3>le {{issue.comments[0].postedOn}}</h3>
-                    <p>{{issue.comments[0].text}}</p>
-
+                <div class="item" ng-repeat="comment in issue.comments">
+                    <h2>Posté par {{comment.author.name}}</h2>
+                    <h3>le {{comment.postedOn}}</h3>
+                    <p>{{comment.text}}</p>
                 </div>
             </div>
         </div>
