@@ -4,7 +4,7 @@
   "proxies": [
     {
       "path": "/api-proxy",
-      "proxyUrl": "http://pure-gorge-1661.herokuapp.com/api"
+      "proxyUrl": "http://dry-oasis-5699.herokuapp.com/api"
     }
   ]
 }
