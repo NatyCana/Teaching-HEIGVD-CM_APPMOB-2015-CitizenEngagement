@@ -140,7 +140,7 @@ angular.module('citizen-engagement', ['ionic', 'citizen-engagement.auth', 'citiz
         }
     });
 })
-        .controller('LoginCtrl', function(AuthService, $http, $ionicHistory, $ionicLoading, $scope, $state) {
+        .controller('LoginCtrl', function(apiUrl, AuthService, $http, $ionicHistory, $ionicLoading, $scope, $state) {
 
     // The $ionicView.beforeEnter event happens every time the screen is displayed.
     $scope.$on('$ionicView.beforeEnter', function() {
@@ -164,7 +164,7 @@ angular.module('citizen-engagement', ['ionic', 'citizen-engagement.auth', 'citiz
         // Make the request to retrieve or create the user.
         $http({
             method: 'POST',
-            url: 'http://localhost:8100/api-proxy/users/logister',
+            url: apiUrl + '/users/logister',
             data: $scope.user
         }).success(function(user) {
 
@@ -240,11 +240,11 @@ angular.module('citizen-engagement', ['ionic', 'citizen-engagement.auth', 'citiz
 })
 
         .controller("IssuesListTabController", function($scope, $state) {
-            $scope.onTabSelected = function() {
-                console.log("user has clicked on Issues List tab");
-                $state.go('tab.issueList');
-            }
-        })
+    $scope.onTabSelected = function() {
+        console.log("user has clicked on Issues List tab");
+        $state.go('tab.issueList');
+    }
+})
 
         /*///////////////////////////////////GetIssues///////////////////////////////////////////////*/
         .controller("GetIssues", function($scope, $http, apiUrl) {
@@ -263,8 +263,11 @@ angular.module('citizen-engagement', ['ionic', 'citizen-engagement.auth', 'citiz
 
         /*///////////////////////////////////GetIssueDetails///////////////////////////////////////////////*/
 
-        .controller("GetIssueDetails", function($scope, $http, apiUrl, $stateParams) {
+        .controller("GetIssueDetails", function($scope, $http, apiUrl, $stateParams, $ionicHistory) {
     $scope.issue = [];
+    $scope.myGoBack = function() {
+        $ionicHistory.goBack();
+    };
     $http({
         method: 'GET',
         url: apiUrl + '/issues/' + $stateParams.issueId
@@ -276,10 +279,13 @@ angular.module('citizen-engagement', ['ionic', 'citizen-engagement.auth', 'citiz
             .error(function(data) {
         console.log("Error");
     });
+
 })
 
 
-/*///////////////////////////////////NewIssue///////////////////////////////////////////////*/
+
+
+        /*///////////////////////////////////NewIssue///////////////////////////////////////////////*/
 
         .controller("NewIssue", function($scope, $http, apiUrl, $stateParams) {
     $scope.issue = [];
