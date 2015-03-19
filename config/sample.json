@@ -1,5 +1,5 @@
 {
-  "apiUrl": "https://example.com/api"
+  "apiUrl": "https://example.com/api",
   	"mapboxMapId": "aaaaa.bbb",
 	"mapboxAccessToken": "pe.nhsdhcdbsdbdsbjdvijascjodvbsdv"
 }

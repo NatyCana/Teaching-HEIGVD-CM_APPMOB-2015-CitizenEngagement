@@ -39,6 +39,10 @@ gulp.task('config-production', function(){
   saveConfig('production');
 });
 
+gulp.task('config-android', function(){
+  saveConfig('android');
+});
+
 gulp.task('sass', function(done) {
   gulp.src('./scss/ionic.app.scss')
     .pipe(sass())

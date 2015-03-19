@@ -15,10 +15,10 @@
                     <div class="list" ng-controller="GetIssues" >
 
                         <div class="item item-thumbnail-left" ng-repeat="item in items">
-                            <img src="../img/brokenstreetlight.jpg">
-                            <h3 >{{item.updateOn}}</h3>
+                            <img src="{{item.imageUrl}}"/>
+                            <h3 >{{item.createdOn}}</h3>
                             <p>{{item.issueType.name}}</p>
-                            <a class=" button icon-right ion-chevron-right button-clear fltrt" id="{{item.id}}">Learn More</a>
+                            <a class=" button icon-right ion-chevron-right button-clear fltrt" id="{{item.id}}" ui-sref="tab.issueDetails({issueId: item.id})">More</a>
                         </div>
 
                     </div>
@@ -35,6 +35,28 @@
                     <input type="text" placeholder="Search">
                 </label>
             </div>
+
+            <div class="list">
+
+                <div class="item item-divider">
+                    Sort by:
+                </div>
+
+                <ul class="list">
+
+                    <li class="item item-checkbox">
+                        <label class="checkbox">
+                            <input type="checkbox">
+                        </label>
+                        Date
+                    </li>
+
+
+                </ul>
+
+
+            </div>
+
         </ion-side-menu>
 
 

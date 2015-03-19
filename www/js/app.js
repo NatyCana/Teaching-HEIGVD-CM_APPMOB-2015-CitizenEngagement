@@ -3,7 +3,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('citizen-engagement', ['ionic', 'citizen-engagement.auth', 'citizen-engagement.constants', "leaflet-directive"])
+angular.module('citizen-engagement', ['ionic', 'citizen-engagement.auth', 'citizen-engagement.constants', "leaflet-directive", "geolocation", 'ui.router'])
 
         .run(function($ionicPlatform) {
     $ionicPlatform.ready(function() {
@@ -20,7 +20,26 @@ angular.module('citizen-engagement', ['ionic', 'citizen-engagement.auth', 'citiz
         .config(function($ionicConfigProvider) {
     $ionicConfigProvider.tabs.position("bottom"); //Places them at the bottom for all OS
 
-  
+
+})
+
+        /*///////////////////////////////////////*/
+        /*///////////////SERVICE//PHOTO//////////*/
+        /*///////////////////////////////////////*/
+
+        .factory("CameraServie", function($q) {
+    return{
+        getPicture: function(options) {
+            var deferred = $q.defer();
+            navigator.camera.getPicture(function(result) {
+                deferred.resolve(result);
+            }, function(err) {
+                deferre.reject(err);
+            }, options);
+            return deferred.promise;
+        }
+    }
+
 })
         .config(function($stateProvider, $urlRouterProvider) {
 
@@ -49,11 +68,12 @@ angular.module('citizen-engagement', ['ionic', 'citizen-engagement.auth', 'citiz
             // The "tab-newIssue" view corresponds to the <ion-nav-view name="tab-newIssue"> directive used in the tabs.html template.
             'tab-newIssue': {
                 // This defines the template that will be inserted into the directive.
-                templateUrl: 'templates/newIssue.html'
+                templateUrl: 'templates/newIssue.html',
+                controller: "NewIssue"
             }
         }
     })
-
+            //State ISSUEMAP
             .state('tab.issueMap', {
         url: '/issueMap',
         views: {
@@ -63,20 +83,24 @@ angular.module('citizen-engagement', ['ionic', 'citizen-engagement.auth', 'citiz
             }
         }
     })
-
+            //State ISSUELIST
             .state('tab.issueList', {
         url: '/issueList',
         views: {
             'tab-issueList': {
-                templateUrl: 'templates/issueList.html'
+                templateUrl: 'templates/issueList.html',
+                controller: "GetIssues"
             }
         }
     })
+            //State LOGIN
             .state('login', {
         url: '/login',
         controller: 'LoginCtrl',
         templateUrl: 'templates/login.html'
     })
+
+            //State ISSUEDETAILS
             // This is the issue details state.
             .state('tab.issueDetails', {
         // We use a parameterized route for this state.
@@ -86,9 +110,11 @@ angular.module('citizen-engagement', ['ionic', 'citizen-engagement.auth', 'citiz
             // Here we use the same "tab-issueList" view as the previous state.
             // This means that the issue details template will be displayed in the same tab as the issue list.
             'tab-issueList': {
+                controller: 'GetIssueDetails',
                 templateUrl: 'templates/issueDetails.html'
             }
-        }
+        },
+        controller: "GetIssueDetails"
     })
 
             ;
@@ -176,7 +202,7 @@ angular.module('citizen-engagement', ['ionic', 'citizen-engagement.auth', 'citiz
     $httpProvider.interceptors.push('AuthInterceptor');
 })
 
-        .controller("MapController", function($scope, mapboxMapId, mapboxAccessToken) {
+        .controller("MapController", function($scope, mapboxMapId, mapboxAccessToken, geolocation) {
     var mapboxTileLayer = "http://api.tiles.mapbox.com/v4/" + mapboxMapId;
     mapboxTileLayer = mapboxTileLayer + "/{z}/{x}/{y}.png?access_token=" + mapboxAccessToken;
     $scope.mapDefaults = {
@@ -188,8 +214,17 @@ angular.module('citizen-engagement', ['ionic', 'citizen-engagement.auth', 'citiz
         zoom: 14
     };
     $scope.mapMarkers = [];
+
+    /*geolocation
+     geolocation.getLocation().then(function(data){
+     $scope.mapCenter.lat =data.coords.latitude;
+     $scope.mapCenter.lng =data.coords.longitude;
+     }, function(error) {
+     $log.error("Could not get location:" + error);
+     });      */
 })
 
+        /*///////////////////////////////////GetIssueType///////////////////////////////////////////////*/
         .controller("GetIssueType", function($scope, $http, apiUrl) {
     $scope.items = [];
     $http({
@@ -198,13 +233,20 @@ angular.module('citizen-engagement', ['ionic', 'citizen-engagement.auth', 'citiz
     })
             .success(function(data) {
         $scope.items = data;
-        console.log(data);
     })
             .error(function(data) {
         console.log("Error");
     });
 })
 
+        .controller("IssuesListTabController", function($scope, $state) {
+            $scope.onTabSelected = function() {
+                console.log("user has clicked on Issues List tab");
+                $state.go('tab.issueList');
+            }
+        })
+
+        /*///////////////////////////////////GetIssues///////////////////////////////////////////////*/
         .controller("GetIssues", function($scope, $http, apiUrl) {
     $scope.items = [];
     $http({
@@ -213,13 +255,46 @@ angular.module('citizen-engagement', ['ionic', 'citizen-engagement.auth', 'citiz
     })
             .success(function(data) {
         $scope.items = data;
+    })
+            .error(function(data) {
+        console.log("Error");
+    });
+})
+
+        /*///////////////////////////////////GetIssueDetails///////////////////////////////////////////////*/
+
+        .controller("GetIssueDetails", function($scope, $http, apiUrl, $stateParams) {
+    $scope.issue = [];
+    $http({
+        method: 'GET',
+        url: apiUrl + '/issues/' + $stateParams.issueId
+    })
+            .success(function(data) {
+        $scope.issue = data;
         console.log(data);
     })
             .error(function(data) {
         console.log("Error");
     });
-
-
 })
+
+
+/*///////////////////////////////////NewIssue///////////////////////////////////////////////*/
+
+        .controller("NewIssue", function($scope, $http, apiUrl, $stateParams) {
+    $scope.issue = [];
+    $http({
+        method: 'POST',
+        url: apiUrl + '/issues/'
+    })
+            .success(function(data) {
+        $scope.issue = data;
+        console.log(data);
+    })
+            .error(function(data) {
+        console.log("Error");
+    });
+})
+
 
 
