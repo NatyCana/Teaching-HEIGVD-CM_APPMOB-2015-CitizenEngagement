@@ -220,8 +220,37 @@ angular.module('citizen-engagement',
         .config(function($httpProvider) {
     $httpProvider.interceptors.push('AuthInterceptor');
 })
+
+
+
+
+
         /*//////////////////////////////////////////MAPCONTROLLER//////////////////////////////////////////////*/
         .controller("MapController", function($scope, mapboxMapId, mapboxAccessToken, Issues, geolocation) {
+    //icon personnalisée
+    var local_icons = {
+        default_icon: {},
+        green_icon: {
+            iconUrl: '../img/green_map_marker.png',
+            iconSize: [43, 43], // size of the icon
+            iconAnchor: [21, 43] // point of the icon which will correspond to marker's location
+                    // popupAnchor: [-3, -76] // point from which the popup should open relative to the iconAnchor
+        }
+    };
+
+    angular.extend($scope, {
+        icons: local_icons
+    });
+
+    //geolocalisation
+    $scope.geoloc = {};
+    geolocation.getLocation().then(function(data) {
+        $scope.geoloc = {lat: data.coords.latitude, lng: data.coords.longitude, icon: local_icons.green_icon, message: "<p>You are here</p>"};
+        $scope.mapMarkers.push($scope.geoloc);
+    }, function(error) {
+        console.log("Could not get location: " + error);
+    });
+
     var mapboxTileLayer = "http://api.tiles.mapbox.com/v4/" + mapboxMapId;
     mapboxTileLayer = mapboxTileLayer + "/{z}/{x}/{y}.png?access_token=" + mapboxAccessToken;
     $scope.mapDefaults = {
@@ -247,7 +276,7 @@ angular.module('citizen-engagement',
                     return scope;
                 }
             };
-            
+
             $scope.mapMarkers.push({
                 lat: issue.lat,
                 lng: issue.lng,
@@ -257,16 +286,9 @@ angular.module('citizen-engagement',
         }
     });
 
+
 })
 
-
-/*geolocation
- geolocation.getLocation().then(function(data){
- $scope.mapCenter.lat =data.coords.latitude;
- $scope.mapCenter.lng =data.coords.longitude;
- }, function(error) {
- $log.error("Could not get location:" + error);
- });      */
 
 
         /*///////////////////////////////////GetIssueType///////////////////////////////////////////////*/
