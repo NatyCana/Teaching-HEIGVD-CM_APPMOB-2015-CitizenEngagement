@@ -165,7 +165,7 @@ angular.module('citizen-engagement',
     });
 })
 
-
+        /*//////////////////////////////////////////LOGIN//CONTROLLER////////////////////////////////////////////*/
         .controller('LoginCtrl', function(apiUrl, AuthService, $http, $ionicHistory, $ionicLoading, $scope, $state) {
 
 // The $ionicView.beforeEnter event happens every time the screen is displayed.
@@ -211,6 +211,8 @@ angular.module('citizen-engagement',
         });
     };
 })
+
+        /*//////////////////////////////////////////LOGOUT//CONTROLLER////////////////////////////////////////////*/
         .controller('LogoutCtrl', function(AuthService, $scope, $state) {
     $scope.logOut = function() {
         AuthService.unsetUser();
@@ -220,10 +222,6 @@ angular.module('citizen-engagement',
         .config(function($httpProvider) {
     $httpProvider.interceptors.push('AuthInterceptor');
 })
-
-
-
-
 
         /*//////////////////////////////////////////MAPCONTROLLER//////////////////////////////////////////////*/
         .controller("MapController", function($scope, mapboxMapId, mapboxAccessToken, Issues, geolocation) {
@@ -356,19 +354,9 @@ angular.module('citizen-engagement',
 
         /*///////////////////////////////////NewIssue///////////////////////////////////////////////*/
 
-        .controller("NewIssue", function($scope, $http, apiUrl, $stateParams) {
-    $scope.issue = [];
-    $http({
-        method: 'POST',
-        url: apiUrl + '/issues/'
-    })
-            .success(function(data) {
-        $scope.issue = data;
-        console.log(data);
-    })
-            .error(function(data) {
-        console.log("Error");
-    });
+        .controller("NewIssue", function($scope, Issues) {
+    $scope.postIssue = function(issueAdd) {
+        Issues.postIssue(issueAdd);
+    }
+
 })
-
-
