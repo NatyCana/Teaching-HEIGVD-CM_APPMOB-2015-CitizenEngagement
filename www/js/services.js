@@ -9,7 +9,7 @@ angular.module('citizen-engagement.services', ['angular-storage'])
             })
         },
         postIssue: function(issue, callback) {
-            $http({
+            return $http({
                 method: 'POST',
                 url: apiUrl + '/issues',
                 data: issue

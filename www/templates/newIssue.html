@@ -5,7 +5,7 @@
     <ion-content>
         <label class="item item-input item-select">
             <div class="input-label" >Issue Type</div>
-            <select ng-controller="GetIssueType">
+            <select ng-controller="GetIssueType" ng-model="issueAdd.issueType">
                 <option ng-repeat="item in items">{{item.name}}</option>
             </select>
         </label>
@@ -15,7 +15,7 @@
         </label>
         
         <a class="button icon-left  ion-camera">Take a photo</a>
-        <a class="button icon-left  ion-location">Add location</a>
+        <a class="button icon-left  ion-location" ng-click="geoloc()">Add location</a>
         <button class="button button-block button-calm" ng-click="postIssue(issueAdd)">
             Save
         </button>

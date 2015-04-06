@@ -354,9 +354,31 @@ angular.module('citizen-engagement',
 
         /*///////////////////////////////////NewIssue///////////////////////////////////////////////*/
 
-        .controller("NewIssue", function($scope, Issues) {
+        .controller("NewIssue", function($scope, Issues, geolocation) {
     $scope.postIssue = function(issueAdd) {
         Issues.postIssue(issueAdd);
     }
-
+    $scope.geoloc = {};
+    geolocation.getLocation().then(function(data) {
+        $scope.geoloc = {
+            lat: data.coords.latitude, 
+            lng: data.coords.longitude};
+ 
+    }, function(error) {
+        console.log("Could not get location: " + error);
+    });
 })
+
+.controller('ScrollController', ['$scope', '$location', '$anchorScroll',
+  function ($scope, $location, $anchorScroll) {
+     
+    $scope.anchorTo = function(id) {
+        
+      // set the location.hash to the id of
+      // the element you wish to scroll to.
+      $location.hash(id);
+
+      // call $anchorScroll()
+      $anchorScroll();
+    };
+  }]);

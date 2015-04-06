@@ -9,7 +9,7 @@
     </ion-nav-buttons>
     <ion-content>
 
-        <div class="list card">
+        <div class="list card" id="debut">
             <div class="item ">
                 <h2>{{issue.issueType.name}}</h2>
                 <h3>Publié par {{issue.owner.name}}</h3>
@@ -23,9 +23,13 @@
         </div>
 
         <div class="list">
-            <div class="item item-divider">
+            <div class="item item-divider" id="scrollArea" ng-controller="ScrollController">
                 Commentaires
+                <button class="button fltrt" ng-click="anchorTo('commentaire')">
+                   <i class="icon ion-chatbubble-working"></i> Ajouter un nouveau commentaire 
+                </button>
             </div>
+            
             <div class="list"  >
                 <div class="item" ng-repeat="comment in issue.comments">
                     <h2>Posté par {{comment.author.name}}</h2>
@@ -34,5 +38,15 @@
                 </div>
             </div>
         </div>
+
+        <div class="NewCommentaire" id="commentaire">
+            <label>
+                <textarea placeholder="Comments"></textarea>
+            </label>
+            <button class="button button-small fltrt" >Nouveau commentaire</button>
+        </div>
+        <button type="button" class="button button-stable button-small" id="scrollArea" ng-controller="ScrollController" ng-click="anchorTo('debut')">
+            Retourner au début
+        </button>
     </ion-content>
 </ion-view>
