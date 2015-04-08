@@ -361,10 +361,10 @@ angular.module('citizen-engagement',
     $scope.postIssue = function(issueAdd) {
         Issues.postIssue(issueAdd, function(data) {
             //Issues.postIssue(issueAdd);
-            $scope.issueAdd.issueType = data.issueType;
-            console.log("Issue Type: "+data.issueType);
-            $scope.issueAdd.description = data.description;
-             console.log("description: "+data.description);
+            $scope.issueAdd.issueType = $scope.issueAdd.issueType ;
+            console.log("Issue Type: "+ $scope.issueAdd.issueType );
+            $scope.issueAdd.description =  $scope.issueAdd.description;
+             console.log("description: "+ $scope.issueAdd.description);
         });
     };
     $scope.geoloc = function() {
