@@ -8,17 +8,18 @@ angular.module('citizen-engagement.services', ['angular-storage'])
                 url: apiUrl + '/issues'
             })
         },
-        postIssue: function(issue, callback) {
+        postIssue: function(issueAdd, callback) {
             return $http({
                 method: 'POST',
                 url: apiUrl + '/issues',
-                data: issue
+                data: issueAdd
             }).
                     success(function(data, status, headers, config) {
-                callback(data);
+                callback(null, data);
                 console.log(data);
             }).
-                    error(function(data, status, headers, config) {
+                    error(function(error) {
+                callback(error);
                 console.log("error");
 
             });
