@@ -363,7 +363,7 @@ angular.module('citizen-engagement',
             //Issues.postIssue(issueAdd);
             $scope.issueAdd.issueType = $scope.issueAdd.issueType ;
             console.log("Issue Type: "+ $scope.issueAdd.issueType );
-            $scope.issueAdd.description =  $scope.issueAdd.description;
+            $scope.issueAdd.description = $scope.issueAdd.description;
              console.log("description: "+ $scope.issueAdd.description);
         });
     };
