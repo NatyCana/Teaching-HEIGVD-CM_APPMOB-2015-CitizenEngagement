@@ -3,9 +3,10 @@
         <button type="button" ng-controller="LogoutCtrl" ng-click="logOut()" class="button button-stable">Log Out</button>
     </ion-nav-buttons>
     <ion-content>
+        <a class="button button-full button-positive ion-location" ng-click="geoloc()"> Add location</a>
         <label class="item item-input item-select">
             <div class="input-label" >Issue Type</div>
-            <select ng-controller="GetIssueType" ng-model="issueAdd.issueType">
+            <select ng-controller="GetIssueType" ng-model="issueAdd.issueType.name">
                 <option ng-repeat="item in items">{{item.name}}</option>
             </select>
         </label>
@@ -15,7 +16,7 @@
         </label>
 
         <a class="button icon-left  ion-camera">Take a photo</a>
-        <a class="button icon-left  ion-location" ng-click="geoloc()">Add location</a>
+        
 
         <button class="button button-block button-calm" ng-click="postIssue(issueAdd)">
             Save

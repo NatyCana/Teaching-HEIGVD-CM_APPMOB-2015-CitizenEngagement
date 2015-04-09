@@ -355,27 +355,28 @@ angular.module('citizen-engagement',
         /*///////////////////////////////////NewIssue///////////////////////////////////////////////*/
 
         .controller("NewIssue", function($scope, Issues, geolocation) {
+    $scope.geoloc = function() {
+        geolocation.getLocation().then(function(data) {
+            $scope.issueAdd.lat = data.coords.latitude;
+            $scope.issueAdd.lng = data.coords.longitude;
+            console.log(data.coords.latitude + " , " + data.coords.longitude);
+        }, function(error) {
+            console.log("Could not get location: " + error);
+        });
+    };
     $scope.$on('$ionicView.beforeEnter', function() {
         $scope.issueAdd = {};
     });
     $scope.postIssue = function(issueAdd) {
         Issues.postIssue(issueAdd, function(data) {
             //Issues.postIssue(issueAdd);
-            $scope.issueAdd.issueType = $scope.issueAdd.issueType ;
-            console.log("Issue Type: "+ $scope.issueAdd.issueType );
+            $scope.issueAdd.issueType = $scope.issueAdd.issueType.name;
+            console.log("Issue Type: " + $scope.issueAdd.issueType);
             $scope.issueAdd.description = $scope.issueAdd.description;
-             console.log("description: "+ $scope.issueAdd.description);
+            console.log("description: " + $scope.issueAdd.description);
         });
     };
-    $scope.geoloc = function() {
-        geolocation.getLocation().then(function(data) {
-            $scope.issueAdd.lat = data.coords.latitude;
-            $scope.issueAdd.lng = data.coords.longitude;
-            console.log(data.coords.latitude +" , "+data.coords.longitude);
-        }, function(error) {
-            console.log("Could not get location: " + error);
-        });
-    };
+
 })
 
 
