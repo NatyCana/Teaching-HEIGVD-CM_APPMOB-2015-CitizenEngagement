@@ -10,7 +10,7 @@ angular.module('citizen-engagement',
             'leaflet-directive',
             'geolocation',
             'ui.router',
-            'citizen-engagement.services'
+            'citizen-engagement.services',
         ])
 
         .run(function($ionicPlatform) {
@@ -370,7 +370,7 @@ angular.module('citizen-engagement',
     $scope.postIssue = function(issueAdd) {
         Issues.postIssue(issueAdd, function(data) {
             //Issues.postIssue(issueAdd);
-            $scope.issueAdd.issueType = $scope.issueAdd.issueType.name;
+            $scope.issueAdd.issueTypeId = $scope.issueAdd.issueType;
             console.log("Issue Type: " + $scope.issueAdd.issueType);
             $scope.issueAdd.description = $scope.issueAdd.description;
             console.log("description: " + $scope.issueAdd.description);
@@ -379,7 +379,21 @@ angular.module('citizen-engagement',
 
 })
 
+        /*///////////////////////////////////NewComment////////////////////////////////////*/
+        .controller("NewComment", function($scope, Issues, geolocation) {
 
+    $scope.$on('$ionicView.beforeEnter', function() {
+        $scope.commentAdd = {};
+    });
+    $scope.newComment = function(commentAd, issueId) {
+//        $scope.commentAdd.text = $scope.commentAdd.text;
+//        console.log("New comment: " + $scope.commentAdd.text);
+console.log("newComment");
+    };
+
+})
+
+        /*///////////////////////////////////ScrollController////////////////////////////////////*/
         .controller('ScrollController', ['$scope', '$location', '$anchorScroll',
     function($scope, $location, $anchorScroll) {
 

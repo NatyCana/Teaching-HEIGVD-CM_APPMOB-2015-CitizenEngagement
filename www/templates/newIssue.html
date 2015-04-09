@@ -6,9 +6,10 @@
         <a class="button button-full button-positive ion-location" ng-click="geoloc()"> Add location</a>
         <label class="item item-input item-select">
             <div class="input-label" >Issue Type</div>
-            <select ng-controller="GetIssueType" ng-model="issueAdd.issueType.name">
-                <option ng-repeat="item in items">{{item.name}}</option>
+            <select ng-controller="GetIssueType" ng-model="issueAdd.issueType">
+                <option ng-repeat="item in items" value=“{{item.id}}”>{{item.name}}</option>
             </select>
+
         </label>
         <label class="item item-input" >
             <span class="input-label">Decsription</span>
@@ -16,7 +17,7 @@
         </label>
 
         <a class="button icon-left  ion-camera">Take a photo</a>
-        
+
 
         <button class="button button-block button-calm" ng-click="postIssue(issueAdd)">
             Save

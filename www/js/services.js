@@ -23,6 +23,22 @@ angular.module('citizen-engagement.services', ['angular-storage'])
                 console.log("error");
 
             });
-        }
+        },
+        newComment: function(commentAdd, issueId, callback) {
+            return $http({
+                method: 'POST',
+                url: apiUrl + '/issues' + issueId,
+                data: commentAdd
+            }).
+                    success(function(data, status, headers, config) {
+                callback(null, data);
+                console.log(data);
+            }).
+                    error(function(error) {
+                callback(error);
+                console.log("error");
+
+            });
+        },
     };
 })
