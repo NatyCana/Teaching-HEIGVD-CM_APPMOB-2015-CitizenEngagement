@@ -6,7 +6,7 @@ angular.module('citizen-engagement.services', ['angular-storage'])
             return $http({
                 method: 'GET',
                 url: apiUrl + '/issues'
-            })
+            });
         },
         postIssue: function(issueAdd, callback) {
             return $http({
@@ -24,10 +24,10 @@ angular.module('citizen-engagement.services', ['angular-storage'])
 
             });
         },
-        newComment: function(commentAdd, issueId, callback) {
+        newComment: function(commentAdd, $stateParams, callback) {
             return $http({
                 method: 'POST',
-                url: apiUrl + '/issues' + issueId,
+                url: apiUrl + '/issues' + $stateParams.issueId,
                 data: commentAdd
             }).
                     success(function(data, status, headers, config) {
