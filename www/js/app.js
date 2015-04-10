@@ -46,7 +46,7 @@ angular.module('citizen-engagement',
             }, options);
             return deferred.promise;
         }
-    }
+    };
 
 })
 
@@ -380,18 +380,31 @@ angular.module('citizen-engagement',
 })
 
         /*///////////////////////////////////NewComment////////////////////////////////////*/
-        .controller("NewComment", function($scope, Issues, geolocation) {
+        .controller("NewComment", function($scope, Issues, $stateParams, $http, apiUrl) {
+    $scope.postComment = function(comment, issue) {
+        var commentToAdd = {
+            "text": comment
+        };
+        issue.comments.push(commentToAdd);
+        console.log(commentToAdd);
+        $http({
+            method: 'POST',
+            url: apiUrl + '/issues/' + issue.id + "/actions",
+            data: {
+                "type": "comment",
+                "payload": {
+                    "text": comment
+                }
+            }
+        }).success(function(data, status) {
+            console.log('sucess!');
 
-    $scope.$on('$ionicView.beforeEnter', function() {
-        $scope.commentAdd = {};
-    });
-    $scope.newComment = function(commentAd, issueId) {
-//        $scope.commentAdd.text = $scope.commentAdd.text;
-//        console.log("New comment: " + $scope.commentAdd.text);
-console.log("newComment");
+        }).error(function(err) {
+            console.log('nope');
+        })
     };
-
 })
+
 
         /*///////////////////////////////////ScrollController////////////////////////////////////*/
         .controller('ScrollController', ['$scope', '$location', '$anchorScroll',
@@ -405,4 +418,40 @@ console.log("newComment");
             // call $anchorScroll()
             $anchorScroll();
         };
-    }]);
+
+
+    }])
+        /*///////////////////////////////////CameraController////////////////////////////////////*/
+        .controller("CameraController", function(CameraService) {
+    CameraService.getPicture({
+        quality: 75,
+        targetWidth: 400,
+        targetHeight: 300,
+        destinationType: Camera.DestinationType.DATA_URL
+    }).then(function(imageData) {
+        // take the picture
+        CameraService.getPicture({
+            quality: 75,
+            targetWidth: 400,
+            targetHeight: 300,
+// return base64-encoded data instead of a file
+            destinationType: Camera.DestinationType.DATA_URL
+        }).then(function(imageData) {
+// upload the image
+            $http({
+                method: "POST",
+                url: qimgUrl + "/images",
+                headers: {
+                    Authorization: "Bearer " + qimgToken
+                },
+                data: {
+                    data: imageData
+                }
+            }).success(function(data) {
+                var imageUrl = data.url;
+// do something with imageUrl
+            });
+        });
+    });
+})
+
