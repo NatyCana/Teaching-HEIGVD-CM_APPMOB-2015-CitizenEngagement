@@ -16,7 +16,7 @@
             <input type="text" placeholder="description" ng-model="issueAdd.description">
         </label>
 
-        <a class="button icon-left  ion-camera">Take a photo</a>
+        <a class="button icon-left  ion-camera" ng-model="issueAdd.imageUrl" ng-click="clickTakePhoto()">Take a photo</a>
 
 
         <button class="button button-block button-calm" ng-click="postIssue(issueAdd)">

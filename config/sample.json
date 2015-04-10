@@ -1,5 +1,6 @@
 {
-  "apiUrl": "https://example.com/api",
-  	"mapboxMapId": "aaaaa.bbb",
-	"mapboxAccessToken": "pe.nhsdhcdbsdbdsbjdvijascjodvbsdv"
+    "apiUrl": "https://example.com/api",
+    "mapboxMapId": "aaaaa.bbb",
+    "mapboxAccessToken": "pe.nhsdhcdbsdbdsbjdvijascjodvbsdv",
+    "qimgUrl": "https://example.com/qimg-proxy",
 }

@@ -367,6 +367,37 @@ angular.module('citizen-engagement',
     $scope.$on('$ionicView.beforeEnter', function() {
         $scope.issueAdd = {};
     });
+//    $scope.takePhoto = function() {
+//        return CameraService.getPicture({
+//            quality: 75,
+//            targetWidth: 400,
+//            targetHeight: 300,
+//// return base64-encoded data instead of a file
+//            destinationType: Camera.DestinationType.DATA_URL
+//
+//        });
+//    }
+//    $scope.photoUp = function() {
+//        return $http({
+//            method: 'POST',
+//            url: qimgUrl + "/images",
+//            headers: {
+//                'Authorization': "Bearer " + qimgToken
+//            }, data: {
+//                data: imageData
+//            }
+//        });
+//
+//    }
+//    $scope.clickTakePhoto = function() {
+//        takePhoto().then(photoUp).then(function(data) {
+//
+//            $scope.issueAdd.imageUrl = data.data.url;
+//
+//        }, function(error) {
+//            alert(error);
+//        });
+//    }
     $scope.postIssue = function(issueAdd) {
         Issues.postIssue(issueAdd, function(data) {
             //Issues.postIssue(issueAdd);
@@ -422,36 +453,40 @@ angular.module('citizen-engagement',
 
     }])
         /*///////////////////////////////////CameraController////////////////////////////////////*/
-        .controller("CameraController", function(CameraService) {
-    CameraService.getPicture({
-        quality: 75,
-        targetWidth: 400,
-        targetHeight: 300,
-        destinationType: Camera.DestinationType.DATA_URL
-    }).then(function(imageData) {
-        // take the picture
-        CameraService.getPicture({
-            quality: 75,
-            targetWidth: 400,
-            targetHeight: 300,
-// return base64-encoded data instead of a file
-            destinationType: Camera.DestinationType.DATA_URL
-        }).then(function(imageData) {
-// upload the image
-            $http({
-                method: "POST",
-                url: qimgUrl + "/images",
-                headers: {
-                    Authorization: "Bearer " + qimgToken
-                },
-                data: {
-                    data: imageData
-                }
-            }).success(function(data) {
-                var imageUrl = data.url;
-// do something with imageUrl
-            });
-        });
-    });
-})
+//
+//
+//        .controller("CameraController", function($scope, CameraService, $http, qimgUrl, qimgToken) {
+//    $scope.takePhoto = function() {
+//        return CameraService.getPicture({
+//            quality: 75,
+//            targetWidth: 400,
+//            targetHeight: 300,
+//// return base64-encoded data instead of a file
+//            destinationType: Camera.DestinationType.DATA_URL
+//
+//        });
+//    }
+//    $scope.photoUp = function() {
+//        return $http({
+//            method: 'POST',
+//            url: qimgUrl + "/images",
+//            headers: {
+//                'Authorization': "Bearer " + qimgToken
+//            }, data: {
+//                data: imageData
+//            }
+//        });
+//
+//    }
+//    $scope.clickTakePhoto = function() {
+//        takePhoto().then(photoUp).then(function(data) {
+//
+//            $scope.issueAdd.imageUrl = data.data.url;
+//
+//        }, function(error) {
+//            alert(error);
+//        });
+//    }
+//
+//})
 

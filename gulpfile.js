@@ -9,74 +9,76 @@ var replace = require('gulp-replace');
 var sh = require('shelljs');
 
 var paths = {
-  sass: ['./scss/**/*.scss']
+    sass: ['./scss/**/*.scss']
 };
 
 gulp.task('default', ['sass']);
 
 function saveConfig(environment) {
 
-  var config = require('./config/' + environment + '.json');
+    var config = require('./config/' + environment + '.json');
 
-  // Use `constants.js` as the source.
-  gulp.src(['constants.js'])
+    // Use `constants.js` as the source.
+    gulp.src(['constants.js'])
 
-    // Replace all occurrences of @apiUrl@.
-    .pipe(replace(/@apiUrl@/g, config.apiUrl))
-    .pipe(replace(/@mapboxMapId@/, config.mapboxMapId))
-    .pipe(replace(/@mapboxAccessToken@/, config.mapboxAccessToken))
-                
+            // Replace all occurrences of @apiUrl@.
+            .pipe(replace(/@apiUrl@/g, config.apiUrl))
+            .pipe(replace(/@mapboxMapId@/, config.mapboxMapId))
+            .pipe(replace(/@mapboxAccessToken@/, config.mapboxAccessToken))
+            .pipe(replace(/@qimgUrl@/, config.qimgUrl))
+            .pipe(replace(/@qimgToken@/, config.qimgToken))
 
-    // Save the result in www/js.
-    .pipe(gulp.dest('www/js'));
+
+            // Save the result in www/js.
+            .pipe(gulp.dest('www/js'));
 }
 
-gulp.task('config-development', function(){
-  saveConfig('development');
+gulp.task('config-development', function() {
+    saveConfig('development');
 });
 
-gulp.task('config-production', function(){
-  saveConfig('production');
+gulp.task('config-production', function() {
+    saveConfig('production');
 });
 
-gulp.task('config-android', function(){
-  saveConfig('android');
+gulp.task('config-android', function() {
+    saveConfig('android');
 });
 
 gulp.task('sass', function(done) {
-  gulp.src('./scss/ionic.app.scss')
-    .pipe(sass())
-    .pipe(gulp.dest('./www/css/'))
-    .pipe(minifyCss({
-      keepSpecialComments: 0
+    gulp.src('./scss/ionic.app.scss')
+            .pipe(sass())
+            .pipe(gulp.dest('./www/css/'))
+            .pipe(minifyCss({
+        keepSpecialComments: 0
     }))
-    .pipe(rename({ extname: '.min.css' }))
-    .pipe(gulp.dest('./www/css/'))
-    .on('end', done);
+            .pipe(rename({extname: '.min.css'}))
+            .pipe(gulp.dest('./www/css/'))
+            .on('end', done);
 });
 
 gulp.task('watch', function() {
-  gulp.watch(paths.sass, ['sass']);
+    gulp.watch(paths.sass, ['sass']);
 });
 
 gulp.task('install', ['git-check'], function() {
-  return bower.commands.install()
-    .on('log', function(data) {
-      gutil.log('bower', gutil.colors.cyan(data.id), data.message);
+    return bower.commands.install()
+            .on('log', function(data) {
+        gutil.log('bower', gutil.colors.cyan(data.id), data.message);
     });
 });
 
 gulp.task('git-check', function(done) {
-  if (!sh.which('git')) {
-    console.log(
-      '  ' + gutil.colors.red('Git is not installed.'),
-      '\n  Git, the version control system, is required to download Ionic.',
-      '\n  Download git here:', gutil.colors.cyan('http://git-scm.com/downloads') + '.',
-      '\n  Once git is installed, run \'' + gutil.colors.cyan('gulp install') + '\' again.'
-    );
-    process.exit(1);
-  }
-  done();
+    if (!sh.which('git')) {
+        console.log(
+                '  ' + gutil.colors.red('Git is not installed.'),
+                '\n  Git, the version control system, is required to download Ionic.',
+                '\n  Download git here:', gutil.colors.cyan('http://git-scm.com/downloads') + '.',
+                '\n  Once git is installed, run \'' + gutil.colors.cyan('gulp install') + '\' again.'
+                );
+        process.exit(1);
+    }
+    done();
 });
 
 
